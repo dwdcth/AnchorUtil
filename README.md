@@ -1,7 +1,7 @@
 # AnchorUtil 
 ###介绍
 该工具类用于解决EgretEngine2.5版本没有anchorX/anchorY属性值的问题
-
+fork 自https://github.com/eperfect/AnchorUtil fix3.x的兼容
 ###使用说明
 在创建游戏场景前需要执行AnchorUtil.init();初始化工具并完成属性的注入
 
@@ -9,7 +9,8 @@
  * AnchorUtil.setAnchorX(target, anchorX); //设置对象的anchorX值
  * AnchorUtil.setAnchorY(target, anchorY); //设置对象的anchorY值
  * AnchorUtil.setAnchor(target, anchor); //同时设置对象的anchorX和anchorY值
-
+ * AnchorUtil.setAnchorXY(target,anchorX,anchorY); //设置对象的anchorX,anchorY值
+ * AnchorUtil.setXY(target,anchorX,anchorY); //同上 设置对象的anchorX,anchorY值
 方式二：
  * target["anchorX"] = value; //设置对象的anchorX值
  * target["anchorY"] = value; //设置对象的anchorY值

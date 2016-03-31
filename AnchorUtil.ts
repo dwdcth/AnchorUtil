@@ -17,15 +17,16 @@
  *
  * Created by Saco on 2015/9/16.
  */
-class AnchorUtil{
+class AnchorUtil {
     private static _isInited;
-    private static _propertyChange:any;
-    private static _anchorChange:any;
+    private static _propertyChange: any;
+    private static _anchorChange: any;
+
 
     /**
      * 初始化工具类，并完成注入anchorX/anchorY属性
      */
-    public static init():void {
+    public static init(): void {
         if(this._isInited) return;
         this._propertyChange = Object.create(null);
         this._anchorChange = Object.create(null);
@@ -38,7 +39,7 @@ class AnchorUtil{
      * @param target 被设置相对冒点属性的对象
      * @param value 相对锚点值
      */
-    public static setAnchorX(target:egret.DisplayObject, value:number):void{
+    public static setAnchorX(target: egret.DisplayObject,value: number): void {
         target["anchorX"] = value;
     }
 
@@ -47,7 +48,7 @@ class AnchorUtil{
      * @param target 被设置相对冒点属性的对象
      * @param value 相对锚点值
      */
-    public static setAnchorY(target:egret.DisplayObject, value:number):void{
+    public static setAnchorY(target: egret.DisplayObject,value: number): void {
         target["anchorY"] = value;
     }
 
@@ -56,16 +57,35 @@ class AnchorUtil{
      * @param target 被设置相对冒点属性的对象
      * @param value 相对锚点值
      */
-    public static setAnchor(target:egret.DisplayObject, value:number):void{
+    public static setAnchor(target: egret.DisplayObject,value: number): void {
         target["anchorX"] = target["anchorY"] = value;
     }
+    
+    /**
+     * 设置对象的anchor值，同时改变anchorX和anchorY值
+     * @param target 被设置相对冒点属性的对象
+     * @param value 相对锚点值
+     */
+    public static setXY(target: egret.DisplayObject,x: number,y:number): void {
+        target["anchorX"] = x;
+        target["anchorY"] = y;
+    }
 
+    /**
+     * 设置对象的anchor值，同时改变anchorX和anchorY值
+     * @param target 被设置相对冒点属性的对象
+     * @param value 相对锚点值
+     */
+    public static setAnchorXY(target: egret.DisplayObject,x: number,y:number): void {
+        target["anchorX"] = x;
+        target["anchorY"] = y;
+    }
     /**
      * 获得对象的anchorX值
      * @param target 取值的对象
      * @returns {any|number} anchorX值
      */
-    public static getAnchorX(target:egret.DisplayObject):number {
+    public static getAnchorX(target: egret.DisplayObject): number {
         return target["anchorX"] || 0;
     }
 
@@ -74,148 +94,148 @@ class AnchorUtil{
      * @param target 取值的对象
      * @returns {any|number} anchorY值
      */
-    public static getAnchorY(target:egret.DisplayObject):number {
+    public static getAnchorY(target: egret.DisplayObject): number {
         return target["anchorY"] || 0;
     }
 
     /**
      * 注入anchorX/anchorY属性，并重写引擎底层方法实现相对锚点
      */
-    private static injectAnchor():void{
-        Object.defineProperty(egret.DisplayObject.prototype, "width", {
-            get: function () {
+    private static injectAnchor(): void {
+        Object.defineProperty(egret.DisplayObject.prototype,"width",{
+            get: function() {
                 return this.$getWidth();
             },
-            set: function (value) {
+            set: function(value) {
                 this.$setWidth(value);
                 AnchorUtil._propertyChange[this.hashCode] = true;
-                egret.callLater(()=>{
+                egret.callLater(() => {
                     AnchorUtil.changeAnchor(this);
-                }, this);
+                },this);
             },
             enumerable: true,
             configurable: true
         });
 
-        Object.defineProperty(egret.DisplayObject.prototype, "height", {
-            get: function () {
+        Object.defineProperty(egret.DisplayObject.prototype,"height",{
+            get: function() {
                 return this.$getHeight();
             },
-            set: function (value) {
+            set: function(value) {
                 this.$setHeight(value);
                 AnchorUtil._propertyChange[this.hashCode] = true;
-                egret.callLater(()=>{
+                egret.callLater(() => {
                     AnchorUtil.changeAnchor(this);
-                }, this);
+                },this);
             },
             enumerable: true,
             configurable: true
         });
 
-        Object.defineProperty(egret.DisplayObject.prototype, "anchorX", {
-            get: function () {
+        Object.defineProperty(egret.DisplayObject.prototype,"anchorX",{
+            get: function() {
                 return this["_anchorX"];
             },
-            set: function (value) {
+            set: function(value) {
                 this._anchorX = value;
                 AnchorUtil._propertyChange[this.hashCode] = true;
                 AnchorUtil._anchorChange[this.hashCode] = true;
-                egret.callLater(()=>{
+                egret.callLater(() => {
                     AnchorUtil.changeAnchor(this);
-                }, this);
+                },this);
             },
             enumerable: true,
             configurable: true
         });
 
-        Object.defineProperty(egret.DisplayObject.prototype, "anchorY", {
-            get: function () {
+        Object.defineProperty(egret.DisplayObject.prototype,"anchorY",{
+            get: function() {
                 return this["_anchorY"];
             },
-            set: function (value) {
+            set: function(value) {
                 this._anchorY = value;
                 AnchorUtil._propertyChange[this.hashCode] = true;
                 AnchorUtil._anchorChange[this.hashCode] = true;
-                egret.callLater(()=>{
+                egret.callLater(() => {
                     AnchorUtil.changeAnchor(this);
-                }, this);
+                },this);
             },
             enumerable: true,
             configurable: true
         });
 
-        Object.defineProperty(egret.DisplayObject.prototype, "anchor", {
-            get: function () {
+        Object.defineProperty(egret.DisplayObject.prototype,"anchor",{
+            get: function() {
                 return this["_anchorX"];
             },
-            set: function (value) {
+            set: function(value) {
                 this._anchorX = value;
                 this._anchorY = value;
                 AnchorUtil._propertyChange[this.hashCode] = true;
                 AnchorUtil._anchorChange[this.hashCode] = true;
-                egret.callLater(()=>{
+                egret.callLater(() => {
                     AnchorUtil.changeAnchor(this);
-                }, this);
+                },this);
             },
             enumerable: true,
             configurable: true
         });
 
-        if(egret.gui && egret.gui.UIComponent) {
-            Object.defineProperty(egret.gui.UIComponent.prototype, "width", {
-                get: function () {
-                    return this._UIC_Props_._uiWidth;
-                },
-                set: function (value) {
-                    this.$setWidth(value);
-                    AnchorUtil._propertyChange[this.hashCode] = true;
-                    egret.callLater(()=>{
-                        AnchorUtil.changeAnchor(this);
-                    }, this);
-                },
-                enumerable: true,
-                configurable: true
-            });
+       if(egret["gui"] && egret["gui"]["UIComponent"]) {
+           Object.defineProperty(egret["gui"]["UIComponent"].prototype,"width",{
+               get: function() {
+                   return this._UIC_Props_._uiWidth;
+               },
+               set: function(value) {
+                   this.$setWidth(value);
+                   AnchorUtil._propertyChange[this.hashCode] = true;
+                   egret.callLater(() => {
+                       AnchorUtil.changeAnchor(this);
+                   },this);
+               },
+               enumerable: true,
+               configurable: true
+           });
 
-            Object.defineProperty(egret.gui.UIComponent.prototype, "height", {
-                get: function () {
-                    return this._UIC_Props_._uiHeight;
-                },
-                set: function (value) {
-                    this.$setHeight(value);
-                    AnchorUtil._propertyChange[this.hashCode] = true;
-                    egret.callLater(()=>{
-                        AnchorUtil.changeAnchor(this);
-                    }, this);
-                },
-                enumerable: true,
-                configurable: true
-            });
+           Object.defineProperty(egret["gui"]["UIComponent"].prototype,"height",{
+               get: function() {
+                   return this._UIC_Props_._uiHeight;
+               },
+               set: function(value) {
+                   this.$setHeight(value);
+                   AnchorUtil._propertyChange[this.hashCode] = true;
+                   egret.callLater(() => {
+                       AnchorUtil.changeAnchor(this);
+                   },this);
+               },
+               enumerable: true,
+               configurable: true
+           });
 
-            egret.gui.UIComponent.prototype.setActualSize = function (w:number, h:number){
-                var change:boolean = false;
-                if (this._UIC_Props_._uiWidth != w) {
-                    this._UIC_Props_._uiWidth = w;
-                    change = true;
-                }
-                if (this._UIC_Props_._uiHeight != h) {
-                    this._UIC_Props_._uiHeight = h;
-                    change = true;
-                }
-                if (change) {
-                    this.invalidateDisplayList();
-                    this.dispatchResizeEvent();
-                    AnchorUtil._propertyChange[this.hashCode] = true;
-                    egret.callLater(()=>{
-                        AnchorUtil.changeAnchor(this);
-                    }, this);
-                }
-            }
-        }
+           egret["gui"]["UIComponent"].prototype.setActualSize = function(w: number,h: number) {
+               var change: boolean = false;
+               if(this._UIC_Props_._uiWidth != w) {
+                   this._UIC_Props_._uiWidth = w;
+                   change = true;
+               }
+               if(this._UIC_Props_._uiHeight != h) {
+                   this._UIC_Props_._uiHeight = h;
+                   change = true;
+               }
+               if(change) {
+                   this.invalidateDisplayList();
+                   this.dispatchResizeEvent();
+                   AnchorUtil._propertyChange[this.hashCode] = true;
+                   egret.callLater(() => {
+                       AnchorUtil.changeAnchor(this);
+                   },this);
+               }
+           }
+       }
     }
 
-    private static changeAnchor(tar:any):void{
-        if(AnchorUtil._propertyChange[tar.hashCode] && AnchorUtil._anchorChange[tar.hashCode]){
+    private static changeAnchor(tar: any): void {
+        if(AnchorUtil._propertyChange[tar.hashCode] && AnchorUtil._anchorChange[tar.hashCode]) {
             tar.anchorOffsetX = tar._anchorX * tar.width;
             tar.anchorOffsetY = tar._anchorY * tar.height;
             delete AnchorUtil._propertyChange[tar.hashCode];
